@@ -1,4 +1,1 @@
-[[This is template content]]
-
-This file should describe what will be covered in the workshop and the motivation for why it is interesting or useful. 
-This will be used in publicity and on the website.
+This workshop introduces people to generating art and creative visualisations using code. It uses the P5js library to do so which can be thought of as a beginner-friendly version of Processing. 

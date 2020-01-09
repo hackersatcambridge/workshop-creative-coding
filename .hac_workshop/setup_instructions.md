@@ -1,5 +1,1 @@
-[[This is template content]]
-
-This file should provide setup instructions for the workshop.
-Mention and software that needs to be installed and the versions
-Mention anything that needs to be downloaded or configured
+The choice to use P5js was to minimise setup - we will be using the [P5js editor](https://editor.p5js.org/).  
