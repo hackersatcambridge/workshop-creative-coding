@@ -22,8 +22,46 @@ function setup() {
 }
 
 function draw() {
-  background(255, 0, 0); // Why in here and not in initial setup? 
+  background(255, 0, 0); /* Why in here and not in initial setup? */
 }
 ```
 
 Why do we draw the background colour in the draw loop and not in the initial setup? Because later on if we do some kind of animation we want to the screen to be "cleared" every loop pf the `draw` function. By placing `background(255, 0, 0)` at the top of the `draw` loop, every "frame" will start by clearing everything and rendering a red background (you can change this to any colour you want). 
+
+Basic Shapes
+------------
+
+p5 comes with basic shape primitives that we can use to make some cool graphics the main ones include:
+
+  - `rect(x, y, w, h)`
+  - `ellipse(x, y, w, h)` 
+  - `triangle(x1, y1, x2, y2, x3, y3)`
+
+Let's draw circle on the screen. One important thing to remember when coding with p5 (and in general with graphics) is that a lot of things are managed by some global state like "what colour should I be drawing with now" or "whereabouts should I draw this" - it might take a bit to get your head around as we're more used to these states being linked to the objects. So let's draw that circle. 
+
+```javascript
+function setup() {
+  createCanvas(600, 600);
+}
+
+function draw() {
+  background(255, 0, 0); 
+  ellipse(0, 0, 10, 10);
+}
+```
+
+You might be wondering - why is it up in the top left corner of the screen. Surely `(0, 0)` should be in the middle of the screen, or even in the bottom-left?! `(300, 300)` is actually in the middle of our screen. Yes, it's like the y-axis is inverted and the x axis has stayed the same. There are two ways we can get the circle to move to the middle of the screen, the simplest is `ellipse(300, 300, 10, 10)`. Another way is to change the "whereabouts should I draw this" state I was talking about before. To do this we use the `translate(x, y)` function which moves our drawing point and sets it to the middle of the screen if we provide the right x and y coordinates. 
+
+```javascript
+function setup() {
+  createCanvas(600, 600);
+}
+
+function draw() {
+  background(255, 0, 0); 
+  translate(300, 300);
+  ellipse(0, 0, 10, 10);
+}
+```
+
+Notice how the x and y coordinates for the ellipse are still set to `0` we've just moved our origin to the centre of the screen. 
