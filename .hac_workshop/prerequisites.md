@@ -1,1 +1,1 @@
-This workshop has the following prerequisites: familiarity with Javascript and general coding principles (for-loops etc.) - not additional setup is required. 
+Some understanding of Javascript (or any imperative programming language of your choice) will be good.

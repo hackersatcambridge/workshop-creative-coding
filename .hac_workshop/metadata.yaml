@@ -35,4 +35,4 @@ tags:
 
 # A license code by which the workshop content is released
 # Should be an 'identifier' from here: https://spdx.org/licenses/
-license: # License-ID
+license: MIT # License-ID
