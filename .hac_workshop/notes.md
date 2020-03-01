@@ -171,3 +171,131 @@ function draw() {
   rect(0, 0, squareSize/2, squareSize/2);
 }
 ```
+
+# Making Art 
+
+We've covered a lot of the basics that now let's us start building some beautiful bits of art. In this first example, we'll take it somewhat slowly and draw a grid that slowly changes colour from the top corner to the bottom corner. 
+
+First things first, let's initialise some of the things we want. Whenever you build a sketch one key mantra is *parameterise all the things*. This makes it a lot easier to explore and be more creative by (a) changing the parameters and (b) dynamically changing them. 
+
+
+
+
+```javascript
+// How many rows and columns we want in the grid
+const G_WIDTH  = 20;
+const G_HEIGHT = 20;
+// To be calculated...
+let cellWidth, cellHeight;
+
+// Called at the beginning once
+function setup() {
+  createCanvas(600, 600);
+  // Calculate cell size - canvas dimensions divided by how many
+  // cells we want per column and row
+  cellWidth = width / G_WIDTH;
+  cellHeight = height / G_HEIGHT;
+}
+
+function draw() {
+  background(244);
+}
+```
+
+Hopefully a lot of that is fairly straight forward. By parameterising the values we can easily increase or decrease the number of cells we draw by changing two numbers. For ease of reading, I will only include the minimum changes for each code block as before. 
+
+So now we want to draw our grid. This is essentially a rectangle for every cell in the grid. One for each of the `G_WIDTH * G_HEIGHT` cells we have. To iterate over all of these we will use a for-loop. 
+
+
+```javascript 
+function draw() {
+  background(244);
+
+  // iterate over the cells
+  for (let row = 0; row < G_HEIGHT; row++) {
+    for (let col = 0; col < G_WIDTH; col++) {
+      // Draw the cell 
+    }
+  }
+}
+```
+
+The naming conventions I'm using here should help indicate what each of the loop variables are counting. Now we need to use these variables to calculate where to draw our rectangles. We know what size they will be so it will look something like `rect(x, y, cellWidth, cellHeight)`. But what are `x` and `y`?
+
+Well each cell is indexed by `col` and `row` but these are counting in `1`s. We want them to really count in `cellWidth` and `cellHeight`. If I draw a cell of size `(10, 10)` at `(20, 10)` and then want to draw one next to it and below it I would have to draw them at `(20 + 10, 10)` and `(20, 10 + 10)`. We need to add the widths and the heights to get to the next spot! We can do this by changing what we increment by each iteration, then drawing a rectangle with that width and height at that point. 
+
+We also need to change what the upper bounds on our loops are. This is simple, we just multiply by the cell size, or because we know that `height = G_HEIGHT * cellHeight` we can just reference these global variables. 
+
+```javascript 
+function draw() {
+  background(244);
+
+  // iterate over the cells
+  for (let row = 0; row < height; row+=cellHeight) {
+    for (let col = 0; col < width; col+=cellWidth) {
+      rect(col, row, cellWidth, cellHeight);
+    }
+  }
+}
+```
+
+Notice that to keep our loops counting in 1s we can just change the code inside the `rect` call. 
+
+```javascript 
+function draw() {
+  background(244);
+
+  // iterate over the cells
+  for (let row = 0; row < G_HEIGHT; row++) {
+    for (let col = 0; col < G_WIDTH; col++) {
+      rect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+    }
+  }
+}
+```
+
+We have a grid! Now to do the fading colour. We want to start in the top left corner with black and make our way down to white in the bottom right corner. First, let's create a unique index for each cell in the grid. We can do this by enumerating them. Using `row` and `col` we're nearly there. The problem is `col` starts at `0` again for each `row`. If we have a `(20, 20)` grid we want the first cell in second row to be number `20` (with 0-based indexing). So for each row we just need to add a rows worth of cells. 
+
+```javascript
+// Indexing
+idx = col + row * G_WIDTH; 
+```
+
+Great! Now comes a more tricky step. Colours use the numbers from `0` to `255` but with our indexing strategy we're using `0` to `400` (for a `20` by `20` grid). We need some way to map one number line to another... good thing this happens a lot and there's a p5 function for this! 
+
+```javascript 
+// map(point, old_lower, old_higher, new_lower, new_higher)
+let color = map(idx, 0, G_HEIGHT * G_WIDTH, 0, 255);
+```
+
+And now we just call fill with the right colour. 
+
+```javascript
+const G_WIDTH  = 20;
+const G_HEIGHT = 20;
+// To be calculated...
+let cellWidth, cellHeight;
+
+// Called at the beginning once
+function setup() {
+  createCanvas(200, 200);
+  // Calculate cell size - canvas dimensions divided by how many
+  // cells we want per column and row
+  cellWidth = width / G_WIDTH;
+  cellHeight = height / G_HEIGHT;
+}
+
+
+function draw() {
+  background(244);
+  // iterate over the cells
+  for (let row = 0; row < G_HEIGHT; row++) {
+    for (let col = 0; col < G_WIDTH; col++) {
+      let idx = col + row * G_WIDTH; 
+      let color = map(idx, 0, G_HEIGHT * G_WIDTH, 0, 255);
+      fill(color);
+      rect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
+    }
+  }
+}
+```
