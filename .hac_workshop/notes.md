@@ -127,3 +127,47 @@ function draw() {
   ellipse(0, 0, 100, 100);
 }
 ```
+
+I have purposefully made the last example use a common mistake when working with graphics. The square we drew was not centred... why? Whenever we draw certain shapes (`rect` here) - the `x` and `y` we provide is not the centre of the shape, it is the top left corner. This is what we placed at the origin, this is also then our centre of rotation hence why these examples have the rectangle a little too low. We can correct this by translating more cleverly. 
+
+```javascript
+const squareSize = 100;
+function draw() {
+  background(220)
+  translate(width/2 - squareSize/2, height/2 - squareSize/2);
+  rotate(PI/4);
+  rect(0, 0, 100, 100);
+}
+```
+
+Hmmm, that didn't work... why? Well if we weren't rotating we would have a square that looks centred but the problem is the centre of rotation is in the top left corner. We want it to be the centre of the square. So we want to move to the middle, rotate then move a little back to centre the square. 
+
+```javascript
+const squareSize = 100;
+function draw() {
+  background(220)
+  translate(width/2, height/2);
+  rotate(PI/4);
+  // This could be a possible solution 
+  translate(-squareSize/2, -squareSize/2);
+  rect(0, 0, squareSize, squareSize);
+}
+```
+
+We can also change the mode by which we draw rectangles by calling `rectMode(RADIUS)` (as opposed to the the default `rectMode(CORNER)`) - note that the `width` and `height` arguments now become `radius` arguments so to get the same shape we need to half them. 
+
+```javascript
+function setup() {
+  createCanvas(600, 600);
+  // Setting the mode for rectangles
+  rectMode(RADIUS);
+}
+
+const squareSize = 100;
+function draw() {
+  background(220)
+  translate(width/2, height/2);
+  rotate(PI/4);
+  rect(0, 0, squareSize/2, squareSize/2);
+}
+```
