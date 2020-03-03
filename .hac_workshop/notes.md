@@ -299,3 +299,134 @@ function draw() {
   }
 }
 ```
+
+# Recap
+
+We've come a long way from knowing nothing about p5js at the start - let's take a moment to recap some of things we have learnt along the way: 
+
+- Basic Shapes: `ellipse`, `rect` and `triangle` 
+- Basic transformations: `translate` and `rotate` 
+- Colours: `color(r, g, b)` 
+- The idea of some global state, the setup and draw-loop 
+- Pushing and popping saved state
+
+In this last tutorial we're going to bring everything together. This is largely based on the Daniel Shiffman's great Coding in the Cabana [video](https://www.youtube.com/watch?v=EYLWxwo1Ed8). It does things a little differently but the principles are the same. 
+
+# Collatz Conjecture 
+
+The [Collatz Conjecture](https://en.wikipedia.org/wiki/Collatz_conjecture) is a long-standing mathematics problem, which at its heart is very simple to explain. Given some positive integer `n` do the following:
+
+ - If `n` is even, divide it by `2`
+ - If `n` is odd, multiply it by `3` and add `1`
+
+If at some point `n` is equal to `1` then stop. The conjecture is that for all positive integers, eventually you will reach `1`. What we're interested in is the path a particular positive integer takes. By path I mean, for each step all the way to `1` did it do the first rule or the second rule. The function below calculates and saves the path. `LEFT` means `n/2` and `RIGHT` means `3n + 1`. 
+
+```javascript
+const LEFT = 1;
+const RIGHT = -1;
+
+function collatz(n, path) {
+  // Return the paths we took 
+  if (n == 1) {
+    return path;
+  }
+
+  // If even then divide by two and turn right 
+  if (n % 2 == 0) {
+    let t = [...path, RIGHT];
+    return collatz(n / 2, t);
+  }
+
+  // If odd, times by 3 add 1 (divide by two and do two steps in one)
+  return collatz((3 * n + 1) / 2, [...path, LEFT, RIGHT]);
+}
+```
+
+Now that we have our paths we want to actually do something creative with them. For this example, we're just going to draw the paths as line segments. The interesting part is that for each segment we're either going to rotate a little to the `LEFT` or a little to the `RIGHT`. First things first, let's move to the centre of our canvas and draw a line. 
+
+```javascript
+
+// PARAMETERISE ALL THE THINGS
+const lineLength = 10;
+const angle = 0.1;
+
+function draw() {
+  // Draw a background colour
+  background(0);
+
+  // Move the center 
+  translate(width/2, height/2);
+  
+
+  // Draw a line 
+  line(0, 0, lineLength, 0);
+}
+```
+
+This should just draw a line out to the right starting at the centre of our canvas. Nothing special, but a good start. But we haven't calculated the paths! We only want to do this once, so it makes sense to put it in the `setup` function at the beginning. 
+
+```javascript
+const N = 10;
+let collatzes = [];
+
+// Called at the beginning once
+function setup() {
+  createCanvas(600, 600);
+
+  // Generate the path of the collatzes at the start
+  for (let i = 2; i < N; i++) {
+    collatzes.push(collatz(i, []));
+  }
+}
+```
+
+We iterate over each of the integers from `1` to `N` and calculate the path using our function `collatz`. We then add this path to our lists of paths `collatzes`. We're almost there! Now comes the slightly more tricky bit. To draw a path of line segments, (1) we need to draw a line, (2) move to the end of the line and repeat. We also need to do our rotation and once we're done with a path we want to move back to where we started to be ready for the next path. Hopefully `push` and `pop` are springing to your mind when I said that. Let's look at the loop for doing this.
+
+```javascript 
+// Each cs is a path e.g. [LEFT, RIGHT, RIGHT, LEFT....]
+for (let cz of collatzes) {
+  // SAVE THE STATE SO WE CAN COME BACK
+  push(); 
+  // Iterate over the path 
+  for (let i = 0; i < cz.length; i++) {
+    // 1. Draw a line 
+    // 2. Move to the end of the line 
+    // 3. Rotate based on left or right 
+  }
+  // RETURN TO THE CENTRE 
+  pop(); 
+}
+```
+
+Maybe try filling in the comments with code that does what they say before looking at the answer in the final code block below with a full definition of the `draw` loop. Remember because of translations and rotations handle direction the `line` function should be static (the same). In fact so should the translation - the only real thing that changes for each path is the angle we turn. 
+
+
+```javascript
+function draw() {
+  background(0);
+  // Set the stroke to red and a small opacity
+  stroke(255, 0, 0, 29);
+  // To the center
+  translate(width / 2, height / 2);
+
+  for (let cs of collatzes) {
+    // Save the state of the world 
+    push();
+    for (let i = 0; i < cs.length; i++) {
+      // Draw a line outward
+      line(0, 0, lineLength, 0);
+      // Move to the end of the line
+      translate(lineLength, 0);
+      // Based on the collatz path rotate left or right
+      rotate(cs[i] * angle);
+    }
+    // Pop the state i.e. move back to the center for the next round
+    pop();
+  }
+
+  // This only needs to be drawn once, so we can turn off the loop
+  noLoop();
+}
+```
+
+![Collatz Conjecture Visualisation](./markdown_images/collatz.png)
