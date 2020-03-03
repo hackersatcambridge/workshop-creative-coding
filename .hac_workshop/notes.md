@@ -7,6 +7,10 @@ As you go through this workshop, you will be introduced to more and more functio
 
 It would also be disrespectful if I didn't mention [Daniel Shiffman](https://twitter.com/shiffman) and the work he has been doing on [The Coding Train](https://www.youtube.com/thecodingtrain) from which this workshop takes inspiration. 
 
+# Before we begin
+
+There is a lot of content in this workshop - it is broken up into three main parts. A gentle introduction to some of the key concepts in p5js, a small example to get your feet wet and finally a more creative (and beautiful) visualisation of the Collatz Conjecture (don't be scared, it's not that hard). That being said, if you are not attending the workshop but our instead going through these notes I would recommend splitting each of these three sections up with some experimenting using the p5js editor. At the bottom of the workshop there are some links to: extra reading, more tutorials and cool visualisations. There is also a great community of Processing fans on twitter which I highly recommend you give a [look](https://twitter.com/search?q=%23processing&src=typed_query). 
+
 # The basics 
 
 p5js is a Javascript library exposing some functions to build graphics. There are two "phases" to drawing something on your screen - an initial `setup` and then the `draw` loop. The setup is called once at the beginning of the session and here you can create the canvas your going to draw on and initialise any objects you want. The draw loop is then called continuously thereafter - there you put your actual graphics code. 
@@ -430,3 +434,15 @@ function draw() {
 ```
 
 ![Collatz Conjecture Visualisation](./markdown_images/collatz.png)
+
+# Where do I go from here? 
+
+Congratulations on reaching the end of this workshop. I hope you learned some things along the way and had fun. This is really just the beginning, below are some additional resources to inspire you and to continue on your creative coding journey. 
+
+- [The Coding Train](https://www.youtube.com/user/shiffman) - by far one of the most entertaining and useful resources for p5js and programming-related things in general. I can't recommend watching some of these videos and looking at the [coding challenges](https://github.com/CodingTrain/website/tree/master/CodingChallenges) repository to get inspiration and learn more. 
+- [p5js examples](https://p5js.org/examples/) - the reference and examples on the p5js website are super useful. 
+- [The Nature of Code Book](https://natureofcode.com/book/) - this is a great resource that will let you take your programming to the next level. 
+
+# A Note on Open-Source 
+
+At the time of writing p5js has official launched its `v1.0.0` - [read about it here](https://medium.com/processing-foundation/p5-js-1-0-is-here-b7267140753a). This is amazing, and only took 7 years of hard work supported by the [Processing Foundation](https://processing.org/overview/) and [333 contributors](https://github.com/processing/p5.js). All of these people worked collaboratively on an open-source program which means anybody can use it (it's under the GPL2 license). I think this is a great example of how open-source promotes community, active collaboration for a common goal and a great way to attract new people.  
